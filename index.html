@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Convertisseur Seyura — Accès sécurisé</title>
+  <meta charset="UTF-8" />
+  <title>Convertisseur Seyura — Sécurisé</title>
   <style>
     body {
       font-family: sans-serif;
@@ -17,10 +16,10 @@
     #login.active, #app.active {
       display: block;
     }
-    input[type="text"], textarea, button {
+    input, textarea, button {
       width: 100%;
-      margin: 10px 0;
       padding: 10px;
+      margin: 10px 0;
       font-size: 16px;
       border-radius: 5px;
     }
@@ -43,43 +42,60 @@
   </style>
 </head>
 <body>
-
   <div id="login" class="active">
     <h2>Entrez votre code d'accès</h2>
-    <input type="text" id="accessCode" placeholder="Code d'accès">
+    <input type="text" id="accessCode" placeholder="Mot de passe" />
     <button onclick="checkCode()">Valider</button>
-    <p id="error" style="color: red;"></p>
+    <p id="error" style="color:red;"></p>
   </div>
 
   <div id="app">
     <h1>Convertisseur Seyura</h1>
+
     <label>Phrase en français (MAJUSCULES uniquement) :</label>
-    <textarea id="inputText" placeholder="EX : SALUT COMMENT TU VAS ?"></textarea>
+    <textarea id="letterInput"></textarea>
     <button onclick="toGlyphs()">Traduire en glyphes</button>
+
     <label>Phrase en glyphes :</label>
     <textarea id="glyphOutput" readonly></textarea>
 
     <label>Texte en glyphes :</label>
-    <textarea id="inputGlyphs" placeholder="EX : §ↃЯ⊥€ Ↄ⊕₥₥€∏⊥ ⊥∩ √∆§ ?"></textarea>
+    <textarea id="inputGlyphs"></textarea>
     <button onclick="toLetters()">Traduire en lettres</button>
+
     <label>Texte déchiffré :</label>
     <textarea id="letterOutput" readonly></textarea>
   </div>
 
   <script>
     const glyphMap = {
-      A: "△", B: "ß", C: "ʊ", D: "◇", E: "Ↄ", F: "Ϩ", G: "⊙", H: "Ш", I: "ᑄ",
-      J: "¿", K: "Ҥ", L: "Λ", M: "◻", N: "ʊ", O: "◎", P: "ↄ", Q: "Ϙ", R: "ə",
-      S: "@", T: "ท", U: "ɵ", V: "▭", W: "W", X: "Ↄ", Y: "Ϥ", Z: "Z"
+      A: "△", O: "◎", I: "<", C: "ʊ", G: "Б", Q: "Ϙ", K: "ʞ", E: "ɔ", S: "@",
+      D: "◇", M: "▭", W: "ɯ", L: "▯", Y: "Λ", H: "Ɏ", U: "Ш", X: "ə", V: "ↄ",
+      Z: "ᔓ", F: "Ṩ", T: "ⅎ", N: "†", R: "∩", P: "ɚ"
     };
-
     const reverseMap = {};
     for (const letter in glyphMap) {
       reverseMap[glyphMap[letter]] = letter;
     }
 
+    const authorizedCodes = [
+      "essieu", "venger", "subtil", "esprit", "agiter", "cocasse",
+      "déjeuner", "rideau", "salive", "perdrix", "narrer", "étatique",
+      "adéquat", "teneur", "jeton", "géologie"
+    ];
+
+    function checkCode() {
+      const code = document.getElementById("accessCode").value.trim().toLowerCase();
+      if (authorizedCodes.includes(code)) {
+        document.getElementById("login").classList.remove("active");
+        document.getElementById("app").classList.add("active");
+      } else {
+        document.getElementById("error").textContent = "Mot de passe incorrect.";
+      }
+    }
+
     function toGlyphs() {
-      const input = document.getElementById("inputText").value.toUpperCase();
+      const input = document.getElementById("letterInput").value.toUpperCase();
       let output = "";
       for (let char of input) {
         output += glyphMap[char] || char;
@@ -94,21 +110,6 @@
         output += reverseMap[char] || char;
       }
       document.getElementById("letterOutput").value = output;
-    }
-
-    function checkCode() {
-      const codes = [
-        "essieu", "venger", "subtil", "esprit", "agiter", "cocasse",
-        "déjeuner", "rideau", "salive", "perdrix", "narrer", "étatique",
-        "adéquat", "teneur", "jeton", "géologie"
-      ];
-      const code = document.getElementById("accessCode").value.trim().toLowerCase();
-      if (codes.includes(code)) {
-        document.getElementById("login").classList.remove("active");
-        document.getElementById("app").classList.add("active");
-      } else {
-        document.getElementById("error").textContent = "Mot de passe incorrect.";
-      }
     }
   </script>
 </body>
