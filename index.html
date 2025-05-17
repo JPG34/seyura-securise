@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Convertisseur Seyura – Accès sécurisé</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convertisseur Seyura — Accès sécurisé</title>
   <style>
     body {
       font-family: sans-serif;
@@ -43,78 +43,72 @@
   </style>
 </head>
 <body>
+  <div id="login" class="active">
+    <h2>Entrez votre code d'accès</h2>
+    <input type="text" id="accessCode" />
+    <button onclick="checkCode()">Valider</button>
+    <p id="error" style="color: red;"></p>
+  </div>
 
-<div id="login" class="active">
-  <h2>Entrez votre code d'accès</h2>
-  <input type="text" id="accessCode" placeholder="Mot de passe">
-  <button onclick="checkCode()">Valider</button>
-  <p id="error" style="color: red;"></p>
-</div>
+  <div id="app">
+    <h2>Phrase en lettres</h2>
+    <textarea id="inputText" placeholder="Ex : SALUT TU VAS BIEN ?"></textarea>
+    <button onclick="toGlyphs()">Traduire en glyphes</button>
+    <textarea id="glyphOutput" readonly></textarea>
 
-<div id="app">
-  <h2>Convertisseur Seyura</h2>
+    <h2>Texte en glyphes</h2>
+    <textarea id="inputGlyphs" placeholder="Ex : Ϭ∆ΛƐθ =@ ⊕ ∆Ↄ )Θ ʘ"></textarea>
+    <button onclick="toLetters()">Traduire en lettres</button>
+    <textarea id="letterOutput" readonly></textarea>
+  </div>
 
-  <label>Texte en français :</label>
-  <textarea id="textInput" placeholder="Ex : SALUT TU VAS BIEN"></textarea>
-  <button onclick="toGlyphs()">Traduire en glyphes</button>
-  <textarea id="glyphOutput" readonly></textarea>
+  <script>
+    const glyphMap = {
+      "A": "∆", "B": "ʘ", "C": "©", "D": "Ↄ", "E": "Ɛ",
+      "F": "Ϝ", "G": "Ϭ", "H": "♄", "I": "ɪ", "J": "ʖ",
+      "K": "Ҡ", "L": "∟", "M": "♏", "N": "⋒", "O": "@",
+      "P": "¶", "Q": "ø", "R": "Я", "S": "Ϭ", "T": "†",
+      "U": "⋃", "V": "√", "W": "Ш", "X": "ж", "Y": "¥", "Z": "ʐ",
+      "?": "¿"
+    };
 
-  <label>Texte en glyphes :</label>
-  <textarea id="inputGlyphs" placeholder="Ex : @△Λ☋⚉ = @△Ↄ☋⚇⚉"></textarea>
-  <button onclick="toLetters()">Traduire en lettres</button>
-  <textarea id="letterOutput" readonly></textarea>
-</div>
+    const reverseMap = {};
+    for (let key in glyphMap) {
+      reverseMap[glyphMap[key]] = key;
+    }
 
-<script>
-  const glyphMap = {
-    A: "△", B: "⊏", C: "Ↄ", D: "◯", E: "◁", F: "Ͻ",
-    G: "◴", H: "◪", I: "◉", J: "⊐", K: "⊠", L: "⧫",
-    M: "⧗", N: "⧖", O: "⚉", P: "⊘", Q: "⚆", R: "@",
-    S: "⧝", T: "Ͽ", U: "☋", V: "⚇", W: "Ͻ", X: "◍",
-    Y: "⊙", Z: "⧊"
-  };
+    function toGlyphs() {
+      const input = document.getElementById("inputText").value.toUpperCase();
+      let output = "";
+      for (let char of input) {
+        output += glyphMap[char] || char;
+      }
+      document.getElementById("glyphOutput").value = output;
+    }
 
-  const reverseMap = {};
-  for (const [key, value] of Object.entries(glyphMap)) {
-    reverseMap[value] = key;
-  }
+    function toLetters() {
+      const input = document.getElementById("inputGlyphs").value;
+      let output = "";
+      for (let char of input) {
+        output += reverseMap[char] || char;
+      }
+      document.getElementById("letterOutput").value = output;
+    }
 
-  function toGlyphs() {
-    const input = document.getElementById("textInput").value.toUpperCase();
-    let output = "";
-    for (let char of input) {
-      if (glyphMap[char]) {
-        output += glyphMap[char];
+    function checkCode() {
+      const codes = [
+        "essieu", "venger", "subtil", "esprit", "agiter", "cocasse",
+        "déjeuner", "rideau", "salive", "perdrix", "narrer", "étatique",
+        "adéquat", "teneur", "jeton", "géologie"
+      ];
+      const code = document.getElementById("accessCode").value.trim().toLowerCase();
+      if (codes.includes(code)) {
+        document.getElementById("login").classList.remove("active");
+        document.getElementById("app").classList.add("active");
       } else {
-        output += char;
+        document.getElementById("error").textContent = "Mot de passe incorrect.";
       }
     }
-    document.getElementById("glyphOutput").value = output;
-  }
-
-  function toLetters() {
-    const input = document.getElementById("inputGlyphs").value;
-    let output = "";
-    for (let char of input) {
-      if (reverseMap[char]) {
-        output += reverseMap[char];
-      } else {
-        output += char;
-      }
-    }
-    document.getElementById("letterOutput").value = output;
-  }
-
-  function checkCode() {
-    const code = document.getElementById("accessCode").value;
-    if (code === "Tobacco") {
-      document.getElementById("login").classList.remove("active");
-      document.getElementById("app").classList.add("active");
-    } else {
-      document.getElementById("error").textContent = "Mot de passe incorrect.";
-    }
-  }
-</script>
-
+  </script>
 </body>
 </html>
