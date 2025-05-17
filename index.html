@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Convertisseur Seyura — Accès sécurisé</title>
   <style>
     body {
@@ -43,38 +43,39 @@
   </style>
 </head>
 <body>
+
   <div id="login" class="active">
     <h2>Entrez votre code d'accès</h2>
-    <input type="text" id="accessCode" />
+    <input type="text" id="accessCode" placeholder="Code d'accès">
     <button onclick="checkCode()">Valider</button>
     <p id="error" style="color: red;"></p>
   </div>
 
   <div id="app">
-    <h2>Phrase en lettres</h2>
-    <textarea id="inputText" placeholder="Ex : SALUT TU VAS BIEN ?"></textarea>
+    <h1>Convertisseur Seyura</h1>
+    <label>Phrase en français (MAJUSCULES uniquement) :</label>
+    <textarea id="inputText" placeholder="EX : SALUT COMMENT TU VAS ?"></textarea>
     <button onclick="toGlyphs()">Traduire en glyphes</button>
+    <label>Phrase en glyphes :</label>
     <textarea id="glyphOutput" readonly></textarea>
 
-    <h2>Texte en glyphes</h2>
-    <textarea id="inputGlyphs" placeholder="Ex : Ϭ∆ΛƐθ =@ ⊕ ∆Ↄ )Θ ʘ"></textarea>
+    <label>Texte en glyphes :</label>
+    <textarea id="inputGlyphs" placeholder="EX : §ↃЯ⊥€ Ↄ⊕₥₥€∏⊥ ⊥∩ √∆§ ?"></textarea>
     <button onclick="toLetters()">Traduire en lettres</button>
+    <label>Texte déchiffré :</label>
     <textarea id="letterOutput" readonly></textarea>
   </div>
 
   <script>
     const glyphMap = {
-      "A": "∆", "B": "ʘ", "C": "©", "D": "Ↄ", "E": "Ɛ",
-      "F": "Ϝ", "G": "Ϭ", "H": "♄", "I": "ɪ", "J": "ʖ",
-      "K": "Ҡ", "L": "∟", "M": "♏", "N": "⋒", "O": "@",
-      "P": "¶", "Q": "ø", "R": "Я", "S": "Ϭ", "T": "†",
-      "U": "⋃", "V": "√", "W": "Ш", "X": "ж", "Y": "¥", "Z": "ʐ",
-      "?": "¿"
+      A: "△", B: "ß", C: "ʊ", D: "◇", E: "Ↄ", F: "Ϩ", G: "⊙", H: "Ш", I: "ᑄ",
+      J: "¿", K: "Ҥ", L: "Λ", M: "◻", N: "ʊ", O: "◎", P: "ↄ", Q: "Ϙ", R: "ə",
+      S: "@", T: "ท", U: "ɵ", V: "▭", W: "W", X: "Ↄ", Y: "Ϥ", Z: "Z"
     };
 
     const reverseMap = {};
-    for (let key in glyphMap) {
-      reverseMap[glyphMap[key]] = key;
+    for (const letter in glyphMap) {
+      reverseMap[glyphMap[letter]] = letter;
     }
 
     function toGlyphs() {
