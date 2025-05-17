@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Convertisseur Seyura - Accès sécurisé</title>
+  <style>
+    body { font-family: sans-serif; background-color: #111; color: #fff; padding: 40px; }
+    #login, #app { display: none; }
+    #login.active, #app.active { display: block; }
+    input[type="text"], textarea, button {
+      width: 100%; margin: 10px 0; padding: 10px; font-size: 16px;
+    }
+    button { background: #444; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #666; }
+  </style>
+</head>
+<body>
+  <div id="login" class="active">
+    <h2>Entrez votre code d'accès</h2>
+    <input type="text" id="accessCode" placeholder="Code unique">
+    <button onclick="checkCode()">Valider</button>
+    <p id="error" style="color: red;"></p>
+  </div>
+
+  <div id="app">
+    <h2>Convertisseur Seyura</h2>
+    <label>Texte en lettres :</label>
+    <textarea id="letterInput" placeholder="Ex : SALUT TU VAS BIEN"></textarea>
+    <button onclick="toGlyphs()">Traduire en glyphes</button>
+    <textarea id="glyphOutput" readonly></textarea>
+
+    <label>Texte en glyphes :</label>
+    <textarea id="inputGlyphs" placeholder="Ex : @△Λ⊖Ϡ ▭⊖ @△Ϡ Ɔ⦾ ℧"></textarea>
+    <button onclick="toLetters()">Traduire en lettres</button>
+    <textarea id="letterOutput" readonly></textarea>
+  </div>
+
+  <script>
+    const validCodes = ["essieu", "venger", "subtil", "esprit", "agiter", "cocasse",
+                        "déjeuner", "rideau", "salive", "perdrix", "narrer", "étatique"];
+
+    function checkCode() {
+      const input = document.getElementById('accessCode').value.trim().toLowerCase();
+      if (validCodes.includes(input)) {
+        document.getElementById('login').classList.remove('active');
+        document.getElementById('app').classList.add('active');
+      } else {
+        document.getElementById('error').innerText = "Code invalide.";
+      }
+    }
+
+    const glyphMap = {
+      A: "△", B: "⊂", C: "Ↄ", D: "∂", E: "⊕", F: "Ϝ", G: "◯", H: "◉",
+      I: "Ш", J: "Ϟ", K: "⊠", L: "╳", M: "▭", N: "⊖", O: "☐", P: "Ϡ",
+      Q: "Ω", R: "@", S: "Ͽ", T: "Ϟ", U: "⊜", V: "⊃", W: "Ɯ", X: "◁",
+      Y: "⦾", Z: "Ƶ"
+    };
+
+    const letterMap = Object.fromEntries(Object.entries(glyphMap).map(([k, v]) => [v, k]));
+
+    function toGlyphs() {
+      const text = document.getElementById('letterInput').value.toUpperCase();
+      let result = "";
+      for (let char of text) {
+        result += glyphMap[char] || char;
+      }
+      document.getElementById('glyphOutput').value = result;
+    }
+
+    function toLetters() {
+      const text = document.getElementById('inputGlyphs').value;
+      let result = "";
+      for (let char of text) {
+        result += letterMap[char] || char;
+      }
+      document.getElementById('letterOutput').value = result;
+    }
+  </script>
+</body>
+</html>
